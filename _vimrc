@@ -1,36 +1,46 @@
 
-"----------------------设定-------------------------
+"----------------------设置------------------------
 
-set guifont=黑体:h20   "设置字体为黑体 18号
+set guifont=Hack:h18   "设置字体
 set ts=4				"设置tab缩进4格
 set shiftwidth=4		"设置>>缩进4格
 set smarttab 			"在行和段开始处使用制表符
+set smartindent			"智能缩进
+"set expandtab			"tab转空格缩进
 set cindent 			"针对C语言语法自动缩进
 set autoindent			"设置自动缩进
 "set number				"设置代码行号显示
  
 
-let &termencoding=&encoding
-set fileencodings=cp936 		 "gbk编码(cp936)
-language messages UTF-8
-let $LANG = 'en_US.UTF-8'
 
-"behave mswin
-"set noswapfile         "不生成交换文件.swp
-"set nobackup			"不生成备份文件
-"set noundofile			"不生成.un~文件(修改文件后重新编辑时也能实现之前步骤的undo功能)
+set encoding=gbk		"新建文件格式
+let termencoding=&encoding
+set fileencodings=gbk,UTF-8  "gbk编码(cp936)
+language messages gbk
+
+
+"修改交换。备份文件位置
+:set directory=C:\Users\21003\Documents\vimswapfiles\swap
+:set undodir=C:\Users\21003\Documents\vimswapfiles\undo
+:set backupdir=C:\Users\21003\Documents\vimswapfiles\backup
+
 
 
 "color morning				"设置主题配色
-set lines=30 columns=80		"启动时窗口大小设置
-winpos 300 200				"设定窗口位置
+set lines=31 columns=90		"启动时窗口大小设置
+winpos 300 200				"设定启动时窗口位置
 set vb t_vb=				"去掉错误提示音
 au GuiEnter * set t_vb=		"关闭闪屏
-set shortmess=atI  		 	" 启动的时候不显示那个援助乌干达儿童的提示
-"set go=             		" 关闭图形按钮  
-set guioptions-=T           " 隐藏工具栏
-set guioptions-=m           " 隐藏菜单栏
+set shortmess=atI  		 	"启动的时候不显示那个援助乌干达儿童的提示
+"set go=             		"关闭图形按钮  
+set guioptions-=T           "隐藏工具栏
+set guioptions-=m           "隐藏菜单栏
 set showtabline=1       	"0关闭标签页，1至少打开2个标签页时才显示，2总是显示
+set history=1000
+
+
+
+
 
 
 source D:\gvim\Vim\vim91\acm\acm.vim   "自定义c++模版配置
@@ -40,14 +50,15 @@ source D:\gvim\Vim\vim91\acm\acm.vim   "自定义c++模版配置
 "------------------按键映射----------------------
   
 
-imap jk <C-[>			
+imap jk <ESC>	
 	"插入模式下		jk映射为Esc  
-	"Ctrl+h/j/k/l映射为上下左右移动光标
+	"Ctrl+h/j/k/l映射为上下左右移动光标		
 imap <C-h> <left>
 imap <C-j> <down>
 imap <C-k> <up>
 imap <C-l> <right>
 
+imap <C-f> <BS>
 
     
 nmap <space> :
@@ -60,7 +71,7 @@ nmap <C-k> <C-w>k
 
 "Ctrl+a 全选复制到系统剪切板
 nmap <C-a> ggVG"+y<Esc>
-nmap <C-p> "+p:w<Esc><C-h>
+nmap <C-p> "+P:w<Esc><C-h>
 
 "cmap ;a <C-[>			
 	"命令模式下  	;a映射为Esc
@@ -90,12 +101,14 @@ Plug 'w0rp/ale'   							"语法检查
 Plug 'vim-airline/vim-airline'       	 	"air-line标签
 Plug 'vim-airline/vim-airline-themes'		"air-line主题
 Plug 'itchyny/vim-cursorword'				"单词下划线
-"Plug 'ryanoasis/vim-devicons'				"文件图标
 Plug 'preservim/nerdcommenter'				"快速注释
 Plug 'neoclide/coc.nvim', {'branch': 'release'}	"coc.nvim
-Plug 'crusoexia/vim-monokai'				"主题
+"Plug 'crusoexia/vim-monokai'				"monokai主题
 Plug 'luochen1990/rainbow'					"彩虹括号
-
+Plug 'junegunn/seoul256.vim'				"seoul主题
+Plug 'jiangmiao/auto-pairs'					"智能括号
+"Plug 'yggdroot/indentline'					"竖对齐线
+"Plug 'ryanoasis/vim-devicons'				"文件图标
 
 call plug#end()
 
@@ -103,8 +116,9 @@ call plug#end()
 
 
 
-
 "nerdtree配置   F3映射为打开文件目录
+"说明：
+"o打开  t/(T)在新标签页(静默)打开   p返回到文件目录  P返回到根目录 
 map <F3> :NERDTreeMirror<CR>
 map <F3> :NERDTreeToggle<CR>
 let g:NERDTreeWinSize = 25 "设定 NERDTree 视窗大小
@@ -126,39 +140,60 @@ let g:airline#extensions#ale#enabled = 1	"配合airline显示错误提示
 
 
 "airline配置
-let g:airline#extensions#tabline#enabled = 1	"启用顶部tabline标签页
-" 设置状态栏
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#enabled = 0	"启用顶部tabline标签页
+"设置状态栏
+"let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#tabline#buffer_nr_show = 0
 let g:airline#extensions#tabline#formatter = 'default'
-let g:airline_theme = 'desertink'  " 主题
+let g:airline#extensions#tabline#formatter = 'unique_tail' 
+let g:airline_theme = 'solarized'  "设置主题
+let g:airline_solarized_bg='light'
 
 
 
 "nerdcommenter插件配置
+"说明：
 ",cc 	注释	注释到光标位置
 ",cu 	取消注释	
 ",cs  	以”性感”的方式注释	  注释到光标所在位置行首
 "5,cs   以”性感”的方式注释光标开始5行
 let mapleader=","		"注释按键改为,
  
+"设置不同语言注释风格
 let g:NERDCustomDelimiters = { 'php': { 'left': '/*','right': '*/' },'html': { 'left': '<!--','right': '-->' },'py': { 'left': '#' },'sh': { 'left': '#' },'cpp':{'left':'//'},'c':{'left':'//'}}
 
 
 "coc.nvim配置
-"使用tab和S+tab补全
+"使用tab和Shift+tab补全
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 
 
 "monokai 配置
-colo monokai  "使用monokai配色
+"colo monokai  "使用monokai配色
 
 
 "rainbow配置
 let g:rainbow_active = 1
+
+
+
+"seoul主题
+colo seoul256	"使用seoul256主题，default:dark
+"colo seoul256-light
+let g:seoul256_background = 236
+"set background=dark
+"set background=light
+
+
+"indentline配置,需要空格缩进
+":set list lcs=tab:\|\ 
+"let g:indentLine_char_list = ['|', '|', '┆', '┊']
+"let g:indentLine_enabled = 0			" 使插件生效
+"let g:indentLine_char = '|'				" 设置缩进线字符，也可以为 '|', '┆', '┊' 等
+"let g:indentLine_conceallevel = 2 		" 使插件正常运行
+
 
 
 "---------------编译配置------------------
@@ -172,10 +207,10 @@ func! CompileRunGcc()
     exec "w"
     if &filetype == 'c'
         exec "!g++ % -o %<" 
-        "exec "! %<"  "运行文件
+        "exec "! %<"
     elseif &filetype == 'cpp'
         exec "!g++ % -o %<"
-        "exec "! %<"   "运行文件
+        "exec "! %<"   
     elseif &filetype == 'java' 
         exec "!javac %" 
         "exec "!java %<"
@@ -183,12 +218,12 @@ func! CompileRunGcc()
         :!./%
     endif
 	"分屏打开in和out窗口
-	"exec "only"
+	exec "only"
 	if(FileIsOpen('in.txt') == 0)
 		belowright vsplit in.txt
 		exec "vertical resize 10"
     	belowright sview out.txt
-		"exec "set readonly"
+		"//exec //"set readonly"
 		exec "wincmd h"
 	endif
 endfunc
@@ -228,7 +263,7 @@ func! InputandRun()
 		belowright vsplit in.txt
 		exec "vertical resize 10"
     	belowright sview out.txt
-		exec "set readonly"
+		"//exec //"set readonly"
 	endif
     wincmd t
     redraw!
@@ -258,16 +293,16 @@ endfunction
 
 
 
-
+"-------------------其他配置-------------------
 "自动补全括号
-:inoremap ( ()<ESC>i
-:inoremap ) <c-r>=ClosePair(')')<CR>
-:inoremap { {<CR>}<ESC>O
-:inoremap } <c-r>=ClosePair('}')<CR>
-:inoremap [ []<ESC>i
-:inoremap ] <c-r>=ClosePair(']')<CR>
-":inoremap " ""<ESC>i
-":inoremap ' ''<ESC>i
+"":inoremap ( ()<ESC>
+":inoremap ) <c-r>=ClosePair(')')<CR>
+":inoremap { {}<ESC>i
+":inoremap } <c-r>=ClosePair('}')<CR>
+":inoremap [ []<ESC>i
+":inoremap ] <c-r>=ClosePair(']')<CR>
+"":inoremap " ""<ESC>i
+"":inoremap ' ''<ESC>i
 
 function! ClosePair(char)
     if getline('.')[col('.') - 1] == a:char
@@ -290,6 +325,23 @@ endfunction
 " Vim with all enhancements
 
 source $VIMRUNTIME/vimrc_example.vim
+"以下配置写在source下s
+"set noswapfile         "关闭生成.swp文件
+"set nobackup			"关闭生成备份文件
+"set noundofile			"关闭生成.un文件
+
+set vb t_vb=
+set laststatus=1
+
+
+"设置gui语言为英文
+"set langmenu=en_US
+"let $LANG = 'en_US'
+"source $VIMRUNTIME/delmenu.vim
+"source $VIMRUNTIME/menu.vim
+
+
+
 
 " Use the internal diff if available.
 " Otherwise use the special 'diffexpr' for Windows.
