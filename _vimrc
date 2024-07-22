@@ -1,16 +1,16 @@
 
 "----------------------设置------------------------
 
-set guifont=Hack:h18   "设置字体
 set ts=4				"设置tab缩进4格
 set shiftwidth=4		"设置>>缩进4格
-set smarttab 			"在行和段开始处使用制表符
+"set smarttab 			"在行和段开始处使用制表符
 set smartindent			"智能缩进
 "set expandtab			"tab转空格缩进
 set cindent 			"针对C语言语法自动缩进
 set autoindent			"设置自动缩进
-"set number				"设置代码行号显示
- 
+set history=1000		"最大历史记录
+set autowriteall		"文件自动保存
+set autoread			"文件自动加载
 
 
 set encoding=gbk		"新建文件格式
@@ -25,25 +25,28 @@ language messages gbk
 :set backupdir=C:\Users\21003\Documents\vimswapfiles\backup
 
 
+source D:\gvim\Vim\vim91\acm\acm.vim   "自定义c++模版配置
 
+
+
+"------------------外观配置---------------------
+
+set guifont=Hack:h17		"设置字体
 "color morning				"设置主题配色
 set lines=31 columns=90		"启动时窗口大小设置
 winpos 300 200				"设定启动时窗口位置
 set vb t_vb=				"去掉错误提示音
+set noerrorbells
 au GuiEnter * set t_vb=		"关闭闪屏
 set shortmess=atI  		 	"启动的时候不显示那个援助乌干达儿童的提示
 "set go=             		"关闭图形按钮  
 set guioptions-=T           "隐藏工具栏
 set guioptions-=m           "隐藏菜单栏
 set showtabline=1       	"0关闭标签页，1至少打开2个标签页时才显示，2总是显示
-set history=1000
-
-
-
-
-
-
-source D:\gvim\Vim\vim91\acm\acm.vim   "自定义c++模版配置
+"set number					"设置代码行号显示set nu
+"set relativenumber			"显示相对行号set rnu
+set numberwidth=1 			"设定行号宽度
+set nowrap					"关闭长行自动换行
 
 
 
@@ -71,7 +74,6 @@ nmap <C-k> <C-w>k
 
 "Ctrl+a 全选复制到系统剪切板
 nmap <C-a> ggVG"+y<Esc>
-nmap <C-p> "+P:w<Esc><C-h>
 
 "cmap ;a <C-[>			
 	"命令模式下  	;a映射为Esc
@@ -81,7 +83,6 @@ vmap <space> <Esc>
 
 set timeoutlen=1000  "设定连续按键延迟为1000ms
 "set winaltkeys=no		"设置Alt键不映射到菜单栏
-
 
 
 
@@ -100,18 +101,17 @@ Plug 'scrooloose/nerdtree'					"目录树
 Plug 'w0rp/ale'   							"语法检查
 Plug 'vim-airline/vim-airline'       	 	"air-line标签
 Plug 'vim-airline/vim-airline-themes'		"air-line主题
-Plug 'itchyny/vim-cursorword'				"单词下划线
+"Plug 'itchyny/vim-cursorword'				"单词下划线
 Plug 'preservim/nerdcommenter'				"快速注释
 Plug 'neoclide/coc.nvim', {'branch': 'release'}	"coc.nvim
 "Plug 'crusoexia/vim-monokai'				"monokai主题
 Plug 'luochen1990/rainbow'					"彩虹括号
 Plug 'junegunn/seoul256.vim'				"seoul主题
-Plug 'jiangmiao/auto-pairs'					"智能括号
+"Plug 'jiangmiao/auto-pairs'				"智能括号
 "Plug 'yggdroot/indentline'					"竖对齐线
 "Plug 'ryanoasis/vim-devicons'				"文件图标
 
 call plug#end()
-
 
 
 
@@ -191,86 +191,86 @@ let g:seoul256_background = 236
 ":set list lcs=tab:\|\ 
 "let g:indentLine_char_list = ['|', '|', '┆', '┊']
 "let g:indentLine_enabled = 0			" 使插件生效
-"let g:indentLine_char = '|'				" 设置缩进线字符，也可以为 '|', '┆', '┊' 等
+"let g:indentLine_char = '|'			" 设置缩进线字符，也可以为 '|', '┆', '┊' 等
 "let g:indentLine_conceallevel = 2 		" 使插件正常运行
+
+
+"AutoPairs配置
+let g:AutoPairsMapCh = 0	"<C-H>删除括号对
+let g:AutoPairsMapSpace = 0 "<space>在两侧添加空格
+let g:AutoPairs = {'(':')', '[':']', '{':'}'}	"设置要配对的括号
+
 
 
 
 "---------------编译配置------------------
 
 
-
-"F5保存,编译(并运行文件)
+"F5 编译
+"编译参数 
+"-o <文件名> 	指定生成文件名
+"-O1 -O2 -O3   	优化级别
+"-g 	在编译时添加调试信息  使用gdb调试时需要
+"-Wall	显示所有编译警告信息
 map <F5> :call CompileRunGcc()<CR>
-
 func! CompileRunGcc()
     exec "w"
     if &filetype == 'c'
         exec "!g++ % -o %<" 
-        "exec "! %<"
     elseif &filetype == 'cpp'
-        exec "!g++ % -o %<"
-        "exec "! %<"   
-    elseif &filetype == 'java' 
-        exec "!javac %" 
-        "exec "!java %<"
-    elseif &filetype == 'sh'
-        :!./%
-    endif
-	"分屏打开in和out窗口
-	exec "only"
-	if(FileIsOpen('in.txt') == 0)
-		belowright vsplit in.txt
-		exec "vertical resize 10"
-    	belowright sview out.txt
-		"//exec //"set readonly"
-		exec "wincmd h"
+        exec "silent !g++ % -o %< -O2"
+		if v:shell_error == 0
+			exec "redraw!"
+			echo "Sussess!"
+		elseif v:shell_error != 0
+			exec "redraw!"
+			echo "Compile Error!"
+			exec "!g++ % -o %< -O2"
+		endif
+		if(FileIsOpen('in.txt') == 0||FileIsOpen('out.txt') == 0)
+			exec "only"
+			belowright vsplit in.txt
+			exec "silent vertical resize 10"
+			belowright sview out.txt
+			exec "silent wincmd h"
+		endif
 	endif
 endfunc
 
 
 "F6 运行文件
 map <F6> :call RunGcc()<CR>
-
 func! RunGcc()
     exec "w"
     if &filetype == 'c'
-        "exec "!g++ % -o %<" 
-        exec "! %<"  
-    elseif &filetype == 'cpp'
-        "exec "!g++ % -o %<" 
         exec "! %<" 
-    elseif &filetype == 'java' 
-       " exec "!javac %" 
-        exec "!java %<"
-    elseif &filetype == 'sh'
-        :!./%
     endif
 endfunc
 
 
 "Ctrl+F6运行并读入in.txt
 map <C-F6> :call InputandRun()<CR>
-
 func! InputandRun()
 	exec "w"
 
-	exec "! %< < in.txt > out.txt | type out.txt"
-
-	"分屏打开in和out窗口
-	exec "only"
-	if(FileIsOpen('in.txt') == 0)
-		belowright vsplit in.txt
-		exec "vertical resize 10"
-    	belowright sview out.txt
-		"//exec //"set readonly"
+	if &filetype == 'cpp'
+		exec "! %< < in.txt > out.txt | type out.txt"
+		if(FileIsOpen('in.txt') == 0 || FileIsOpen('out.txt') == 0)
+			exec "only"
+			belowright vsplit in.txt
+			exec "vertical resize 10"
+			belowright sview out.txt
+		endif
+		wincmd t
+		redraw!
+	elseif (expand('%') == 'in.txt' || expand('%') == 'out.txt')
+		exec "silent wincmd h"
+		:call InputandRun()
 	endif
-    wincmd t
-    redraw!
 endfunc
 
 
-"判断'文件'是否打开
+"函数：判断'文件'是否打开
 function! FileIsOpen(file)
   let bufnr = bufnr(a:file)
   if bufnr != -1 && bufwinid(bufnr) != -1
@@ -290,20 +290,33 @@ endfunction
 "    exec "!gdb %<"
 "endfunc
 
+"将复制内容覆写入in.txt
+nmap <C-p> :call CtrlP()<CR>
+function! CtrlP()
+	if expand('%') == 'in.txt'
+		%d
+		exec "normal! \"+P"
+		w
+		wincmd h
+	else
+		exec "normal \"+p"
+	endif
+endfunction
 
 
 
 "-------------------其他配置-------------------
 "自动补全括号
-"":inoremap ( ()<ESC>
-":inoremap ) <c-r>=ClosePair(')')<CR>
-":inoremap { {}<ESC>i
-":inoremap } <c-r>=ClosePair('}')<CR>
-":inoremap [ []<ESC>i
-":inoremap ] <c-r>=ClosePair(']')<CR>
-"":inoremap " ""<ESC>i
-"":inoremap ' ''<ESC>i
+:inoremap ( ()<Left>
+:inoremap ) <c-r>=ClosePair(')')<CR>
+:inoremap { {}<Left>
+:inoremap } <c-r>=ClosePair('}')<CR>
+:inoremap [ []<Left>
+:inoremap ] <c-r>=ClosePair(']')<CR>
+":inoremap " ""<Left>
+":inoremap ' ''<Left>
 
+"函数：右括号覆盖
 function! ClosePair(char)
     if getline('.')[col('.') - 1] == a:char
         return "\<Right>"
@@ -312,11 +325,37 @@ function! ClosePair(char)
     endif
 endfunction
 
+"函数：括号配对删除
+imap <BS> <c-r>=UuzDeleteBrackets()<CR>
+function! UuzDeleteBrackets()
+	let col = col('.') - 1
+	let line = getline('.')
+	if col > 0 && col < len(line) && ((line[col - 1] == '(' && line[col] == ')') ||(line[col - 1] == '{' && line[col] == '}') || (line[col - 1] == '[' && line[col] == ']'))
+		return "\<Del>\<BS>"
+	else 
+		return "\<BS>"
+	endif
+endfunction
 
 
 
 
-
+"函数：花括号回车自动换行
+imap <CR> <c-r>=UuzBrackets('}')<CR>
+imap <S-CR> <c-r>=UuzBrackets('}')<CR>
+function! UuzBrackets(char)
+	if getline('.')[col('.') - 1] == a:char
+		let col = col('.') - 1
+		let line = getline('.')
+		if(stridx(line,'{')) != -1
+			return "\<CR>\<ESC>\%a\<CR>"
+		else
+			return "\<CR>"
+		endif
+	else 
+		return "\<CR>"
+	endif
+endfunction
 
 
 
@@ -326,7 +365,7 @@ endfunction
 
 source $VIMRUNTIME/vimrc_example.vim
 "以下配置写在source下s
-"set noswapfile         "关闭生成.swp文件
+set noswapfile         "关闭生成.swp文件
 "set nobackup			"关闭生成备份文件
 "set noundofile			"关闭生成.un文件
 
