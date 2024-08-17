@@ -31,29 +31,32 @@ source D:\gvim\Vim\vim91\acm\acm.vim   "自定义c++模版配置
 
 "------------------外观配置---------------------
 
-set guifont=Hack:h17		"设置字体
+set guifont=Hack:h15		"设置字体
 "color morning				"设置主题配色
-set lines=31 columns=90		"启动时窗口大小设置
+set lines=35 columns=100		"启动时窗口大小设置
 winpos 300 200				"设定启动时窗口位置
 set vb t_vb=				"去掉错误提示音
 set noerrorbells
 au GuiEnter * set t_vb=		"关闭闪屏
 set shortmess=atI  		 	"启动的时候不显示那个援助乌干达儿童的提示
-"set go=             		"关闭图形按钮  
+set go=             		"关闭图形按钮  
 set guioptions-=T           "隐藏工具栏
-set guioptions-=m           "隐藏菜单栏
+"set guioptions-=m           "隐藏菜单栏
 set showtabline=1       	"0关闭标签页，1至少打开2个标签页时才显示，2总是显示
 "set number					"设置代码行号显示set nu
 "set relativenumber			"显示相对行号set rnu
 set numberwidth=1 			"设定行号宽度
 set nowrap					"关闭长行自动换行
-
+set cul						"高亮光标所在行
+"set cuc 					"高亮光标所在列
+":set guicursor=n:hor20		"设置光标样式
+set guioptions+=r			"设置滚动条,-=关闭,+=开启，l左，r右，b底部
 
 
 "------------------按键映射----------------------
   
 
-imap jk <ESC>	
+imap jk <C-C>	
 	"插入模式下		jk映射为Esc  
 	"Ctrl+h/j/k/l映射为上下左右移动光标		
 imap <C-h> <left>
@@ -63,7 +66,9 @@ imap <C-l> <right>
 
 imap <C-f> <BS>
 
-    
+imap <C-;> <Right>
+imap <C-g> <BS>
+
 nmap <space> :
 	"普通入模式下		<space>映射为:
 	"C+h/j/k/l窗口切换
@@ -72,8 +77,24 @@ nmap <C-l> <C-w>l
 nmap <C-j> <C-w>j
 nmap <C-k> <C-w>k
 
-"Ctrl+a 全选复制到系统剪切板
 nmap <C-a> ggVG"+y<Esc>
+"Ctrl+a 全选复制到系统剪切板
+
+nmap <S-j> 5j
+nmap <S-k> 5k
+
+"smart indent when entering insert mode with i on empty lines 
+"function! IndentWithI() 
+"	if len(getline('.')) == 0 
+"		return "cc" 
+"	else
+"		return "i" 
+"	endif 
+"endfunction 
+"nnoremap <expr> i IndentWithI()
+
+
+
 
 "cmap ;a <C-[>			
 	"命令模式下  	;a映射为Esc
@@ -108,8 +129,8 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}	"coc.nvim
 Plug 'luochen1990/rainbow'					"彩虹括号
 Plug 'junegunn/seoul256.vim'				"seoul主题
 "Plug 'jiangmiao/auto-pairs'				"智能括号
-"Plug 'yggdroot/indentline'					"竖对齐线
-"Plug 'ryanoasis/vim-devicons'				"文件图标
+"Plug 'yggdroot/indentline'					"竖对齐线 需要空格缩进
+"Plug 'ryanoasis/vim-devicons'				"文件图标 需要utf-8和特定字体支持
 
 call plug#end()
 
@@ -134,7 +155,6 @@ let g:ale_sign_warning = '-'   "waring类型警告替换为-
 let g:ale_set_signs = 0		"左栏柱状提示
 let g:airline#extensions#ale#enabled = 1	"配合airline显示错误提示
 "let g:ale_enabled = 0			"禁用ale
-
 
 
 
@@ -204,6 +224,36 @@ let g:AutoPairs = {'(':')', '[':']', '{':'}'}	"设置要配对的括号
 
 
 "---------------编译配置------------------
+" 禁用数字键和 <F-n> 的组合  
+map 1<F5> 1<F5>
+map 2<F5> 1<F5>
+map 3<F5> 1<F5>
+map 4<F5> 1<F5>
+map 5<F5> 1<F5>
+map 6<F5> 1<F5>
+map 7<F5> 1<F5>
+map 8<F5> 1<F5>
+map 9<F5> 1<F5>
+
+map 1<F6> 1<F6>
+map 2<F6> 1<F6>
+map 3<F6> 1<F6>
+map 4<F6> 1<F6>
+map 5<F6> 1<F6>
+map 6<F6> 1<F6>
+map 7<F6> 1<F6>
+map 8<F6> 1<F6>
+map 9<F6> 1<F6>
+
+map 1<C-F6> 1<C-F6>
+map 2<C-F6> 1<C-F6>
+map 3<C-F6> 1<C-F6>
+map 4<C-F6> 1<C-F6>
+map 5<C-F6> 1<C-F6>
+map 6<C-F6> 1<C-F6>
+map 7<C-F6> 1<C-F6>
+map 8<C-F6> 1<C-F6>
+map 9<C-F6> 1<C-F6>
 
 
 "F5 编译
@@ -230,7 +280,7 @@ func! CompileRunGcc()
 		if(FileIsOpen('in.txt') == 0||FileIsOpen('out.txt') == 0)
 			exec "only"
 			belowright vsplit in.txt
-			exec "silent vertical resize 10"
+			exec "silent vertical resize 21"
 			belowright sview out.txt
 			exec "silent wincmd h"
 		endif
@@ -242,7 +292,7 @@ endfunc
 map <F6> :call RunGcc()<CR>
 func! RunGcc()
     exec "w"
-    if &filetype == 'c'
+    if &filetype == 'cpp'
         exec "! %<" 
     endif
 endfunc
@@ -258,7 +308,7 @@ func! InputandRun()
 		if(FileIsOpen('in.txt') == 0 || FileIsOpen('out.txt') == 0)
 			exec "only"
 			belowright vsplit in.txt
-			exec "vertical resize 10"
+			exec "vertical resize 21"
 			belowright sview out.txt
 		endif
 		wincmd t
