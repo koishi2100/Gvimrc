@@ -3,7 +3,7 @@
 
 set ts=4				"设置tab缩进4格
 set shiftwidth=4		"设置>>缩进4格
-"set smarttab 			"在行和段开始处使用制表符
+set smarttab 			"在行和段开始处使用制表符
 set smartindent			"智能缩进
 "set expandtab			"tab转空格缩进
 set cindent 			"针对C语言语法自动缩进
@@ -11,7 +11,6 @@ set autoindent			"设置自动缩进
 set history=1000		"最大历史记录
 set autowriteall		"文件自动保存
 set autoread			"文件自动加载
-
 
 set encoding=gbk		"新建文件格式
 let termencoding=&encoding
@@ -32,11 +31,11 @@ source D:\gvim\Vim\vim91\acm\acm.vim   "自定义c++模版配置
 "------------------外观配置---------------------
 
 set guifont=Hack:h15		"设置字体
-"color morning				"设置主题配色
-set lines=35 columns=100		"启动时窗口大小设置
+color desert				"设置主题配色
+set lines=35 columns=100	"启动时窗口大小设置
 winpos 300 200				"设定启动时窗口位置
 set vb t_vb=				"去掉错误提示音
-set noerrorbells
+set noerrorbells			"去掉错误提示音
 au GuiEnter * set t_vb=		"关闭闪屏
 set shortmess=atI  		 	"启动的时候不显示那个援助乌干达儿童的提示
 set go=             		"关闭图形按钮  
@@ -49,14 +48,15 @@ set numberwidth=1 			"设定行号宽度
 set nowrap					"关闭长行自动换行
 set cul						"高亮光标所在行
 "set cuc 					"高亮光标所在列
-":set guicursor=n:hor20		"设置光标样式
+set guicursor=i:hor20		"设置insert模式下光标样式
+"set guicursor=n:hor20		"设置normal模式下光标样式
 set guioptions+=r			"设置滚动条,-=关闭,+=开启，l左，r右，b底部
 
 
 "------------------按键映射----------------------
   
 
-imap jk <C-C>	
+imap jk <ESC>	
 	"插入模式下		jk映射为Esc  
 	"Ctrl+h/j/k/l映射为上下左右移动光标		
 imap <C-h> <left>
@@ -65,9 +65,9 @@ imap <C-k> <up>
 imap <C-l> <right>
 
 imap <C-f> <BS>
-
-imap <C-;> <Right>
+imap <C-i> <BS>
 imap <C-g> <BS>
+imap <C-;> <Right>
 
 nmap <space> :
 	"普通入模式下		<space>映射为:
@@ -115,19 +115,20 @@ call plug#begin('D:\gvim\Vim\vim91\plugged')
 
 " List your plugins here   指令:PlugInstall安装插件    :PlugStatus查看状态    :PlugUpdate更新插件
 
-
-
-Plug 'octol/vim-cpp-enhanced-highlight'		"增强高亮
-Plug 'scrooloose/nerdtree'					"目录树
 Plug 'w0rp/ale'   							"语法检查
+Plug 'junegunn/seoul256.vim'				"seoul主题
+
 Plug 'vim-airline/vim-airline'       	 	"air-line标签
 Plug 'vim-airline/vim-airline-themes'		"air-line主题
-"Plug 'itchyny/vim-cursorword'				"单词下划线
-Plug 'preservim/nerdcommenter'				"快速注释
-Plug 'neoclide/coc.nvim', {'branch': 'release'}	"coc.nvim
-"Plug 'crusoexia/vim-monokai'				"monokai主题
+Plug 'scrooloose/nerdtree'					"目录树
 Plug 'luochen1990/rainbow'					"彩虹括号
-Plug 'junegunn/seoul256.vim'				"seoul主题
+"Plug 'octol/vim-cpp-enhanced-highlight'	"增强高亮
+"Plug 'preservim/nerdcommenter'				"快速注释
+
+
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}	"coc.nvim
+"Plug 'itchyny/vim-cursorword'				"单词下划线
+"Plug 'crusoexia/vim-monokai'				"monokai主题
 "Plug 'jiangmiao/auto-pairs'				"智能括号
 "Plug 'yggdroot/indentline'					"竖对齐线 需要空格缩进
 "Plug 'ryanoasis/vim-devicons'				"文件图标 需要utf-8和特定字体支持
@@ -150,12 +151,16 @@ let g:NERDTreeWinSize = 25 "设定 NERDTree 视窗大小
 let g:ale_set_highlights = 1		"错误高亮
 "let g:ale_lint_on_text_changed = 'never'   "never文件内容发生变化时不进行检查
 let g:ale_lint_on_enter = 0     "打开文件时不进行检查
-let g:ale_sign_error = '>'		"error类型警告替换为>
+let g:ale_sign_error = 'x'		"error类型警告替换为>
 let g:ale_sign_warning = '-'   "waring类型警告替换为-
 let g:ale_set_signs = 0		"左栏柱状提示
 let g:airline#extensions#ale#enabled = 1	"配合airline显示错误提示
 "let g:ale_enabled = 0			"禁用ale
-
+let g:ale_lint_delay = 500  	"500毫秒
+"let g:ale_cpp_gcc_options = '-O2 -std=c++17'
+"let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_lint_on_insert_leave = 0   "离开insert模式时不进行检查
+let g:ale_virtualtext_cursor = 0	"关闭注释
 
 
 
@@ -201,8 +206,8 @@ let g:rainbow_active = 1
 
 "seoul主题
 colo seoul256	"使用seoul256主题，default:dark
-"colo seoul256-light
 let g:seoul256_background = 236
+"colo seoul256-light
 "set background=dark
 "set background=light
 
@@ -265,18 +270,13 @@ map 9<C-F6> 1<C-F6>
 map <F5> :call CompileRunGcc()<CR>
 func! CompileRunGcc()
     exec "w"
+
     if &filetype == 'c'
         exec "!g++ % -o %<" 
     elseif &filetype == 'cpp'
-        exec "silent !g++ % -o %< -O2"
-		if v:shell_error == 0
-			exec "redraw!"
-			echo "Sussess!"
-		elseif v:shell_error != 0
-			exec "redraw!"
-			echo "Compile Error!"
-			exec "!g++ % -o %< -O2"
-		endif
+
+		exec "silent !g++ % -o %< -O2 && exit || pause"
+
 		if(FileIsOpen('in.txt') == 0||FileIsOpen('out.txt') == 0)
 			exec "only"
 			belowright vsplit in.txt
@@ -284,6 +284,9 @@ func! CompileRunGcc()
 			belowright sview out.txt
 			exec "silent wincmd h"
 		endif
+
+		exec "redraw!"
+		echo "Finished!"
 	endif
 endfunc
 
@@ -294,6 +297,7 @@ func! RunGcc()
     exec "w"
     if &filetype == 'cpp'
         exec "! %<" 
+		exec "redraw"
     endif
 endfunc
 
@@ -431,7 +435,6 @@ set laststatus=1
 
 
 
-
 " Use the internal diff if available.
 " Otherwise use the special 'diffexpr' for Windows.
 if &diffopt !~# 'internal'
@@ -469,4 +472,3 @@ function MyDiff()
     let &shellxquote=l:shxq_sav
   endif
 endfunction
-
