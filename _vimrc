@@ -11,6 +11,7 @@ set autoindent			"设置自动缩进
 set history=1000		"最大历史记录
 set autowriteall		"文件自动保存
 set autoread			"文件自动加载
+set fileformat=unix		"忽略^M换行符
 
 set encoding=gbk		"新建文件格式
 let termencoding=&encoding
@@ -18,7 +19,7 @@ set fileencodings=gbk,UTF-8  "gbk编码(cp936)
 language messages gbk
 
 
-"修改交换。备份文件位置
+"修改交换,备份文件位置
 :set directory=C:\Users\21003\Documents\vimswapfiles\swap
 :set undodir=C:\Users\21003\Documents\vimswapfiles\undo
 :set backupdir=C:\Users\21003\Documents\vimswapfiles\backup
@@ -38,10 +39,11 @@ set vb t_vb=				"去掉错误提示音
 set noerrorbells			"去掉错误提示音
 au GuiEnter * set t_vb=		"关闭闪屏
 set shortmess=atI  		 	"启动的时候不显示那个援助乌干达儿童的提示
-set go=             		"关闭图形按钮  
-set guioptions-=T           "隐藏工具栏
+set go=             		"关闭图形按钮 set go=Tm 
+"set guioptions-=T           "隐藏工具栏
 "set guioptions-=m           "隐藏菜单栏
-set showtabline=1       	"0关闭标签页，1至少打开2个标签页时才显示，2总是显示
+set guioptions+=r			"设置滚动条,-=关闭,+=开启，l左，r右，b底部
+set showtabline=1       	"0:关闭标签页，1:至少打开2个标签页时才显示，2:总是显示
 "set number					"设置代码行号显示set nu
 "set relativenumber			"显示相对行号set rnu
 set numberwidth=1 			"设定行号宽度
@@ -50,7 +52,6 @@ set cul						"高亮光标所在行
 "set cuc 					"高亮光标所在列
 set guicursor=i:hor20		"设置insert模式下光标样式
 "set guicursor=n:hor20		"设置normal模式下光标样式
-set guioptions+=r			"设置滚动条,-=关闭,+=开启，l左，r右，b底部
 
 
 "------------------按键映射----------------------
@@ -68,6 +69,7 @@ imap <C-f> <BS>
 imap <C-i> <BS>
 imap <C-g> <BS>
 imap <C-;> <Right>
+imap <C-z> <C-o>u
 
 nmap <space> :
 	"普通入模式下		<space>映射为:
@@ -77,30 +79,20 @@ nmap <C-l> <C-w>l
 nmap <C-j> <C-w>j
 nmap <C-k> <C-w>k
 
-nmap <C-a> ggVG"+y<Esc>
-"Ctrl+a 全选复制到系统剪切板
+nmap <C-a> <Esc>ggVG
+vmap <C-a> <Esc>ggVG
+vmap <C-c> "+y
+"Ctrl+a+c 全选复制到系统剪切板
 
 nmap <S-j> 5j
 nmap <S-k> 5k
 
-"smart indent when entering insert mode with i on empty lines 
-"function! IndentWithI() 
-"	if len(getline('.')) == 0 
-"		return "cc" 
-"	else
-"		return "i" 
-"	endif 
-"endfunction 
-"nnoremap <expr> i IndentWithI()
 
 
-
-
-"cmap ;a <C-[>			
-	"命令模式下  	;a映射为Esc
 
 vmap <space> <Esc>	
 	"可视模式下		<space>映射为Esc
+vmap <C-d> d
 
 set timeoutlen=1000  "设定连续按键延迟为1000ms
 "set winaltkeys=no		"设置Alt键不映射到菜单栏
@@ -124,9 +116,9 @@ Plug 'scrooloose/nerdtree'					"目录树
 Plug 'luochen1990/rainbow'					"彩虹括号
 "Plug 'octol/vim-cpp-enhanced-highlight'	"增强高亮
 "Plug 'preservim/nerdcommenter'				"快速注释
-
-
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}	"coc.nvim
+
+
 "Plug 'itchyny/vim-cursorword'				"单词下划线
 "Plug 'crusoexia/vim-monokai'				"monokai主题
 "Plug 'jiangmiao/auto-pairs'				"智能括号
@@ -152,15 +144,15 @@ let g:ale_set_highlights = 1		"错误高亮
 "let g:ale_lint_on_text_changed = 'never'   "never文件内容发生变化时不进行检查
 let g:ale_lint_on_enter = 0     "打开文件时不进行检查
 let g:ale_sign_error = 'x'		"error类型警告替换为>
-let g:ale_sign_warning = '-'   "waring类型警告替换为-
-let g:ale_set_signs = 0		"左栏柱状提示
+let g:ale_sign_warning = '-'   	"waring类型警告替换为-
+let g:ale_set_signs = 0			"左栏柱状提示
 let g:airline#extensions#ale#enabled = 1	"配合airline显示错误提示
 "let g:ale_enabled = 0			"禁用ale
-let g:ale_lint_delay = 500  	"500毫秒
+let g:ale_lint_delay = 50  		"检查延迟(毫秒)
 "let g:ale_cpp_gcc_options = '-O2 -std=c++17'
 "let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_lint_on_insert_leave = 0   "离开insert模式时不进行检查
-let g:ale_virtualtext_cursor = 0	"关闭注释
+let g:ale_lint_on_insert_leave = 0  	"离开insert模式时不进行检查
+let g:ale_virtualtext_cursor = 0		"关闭注释
 
 
 
@@ -270,61 +262,76 @@ map 9<C-F6> 1<C-F6>
 map <F5> :call CompileRunGcc()<CR>
 func! CompileRunGcc()
     exec "w"
-
-    if &filetype == 'c'
-        exec "!g++ % -o %<" 
-    elseif &filetype == 'cpp'
-
-		exec "silent !g++ % -o %< -O2 && exit || pause"
-
-		if(FileIsOpen('in.txt') == 0||FileIsOpen('out.txt') == 0)
-			exec "only"
-			belowright vsplit in.txt
-			exec "silent vertical resize 21"
-			belowright sview out.txt
-			exec "silent wincmd h"
+	if(&filetype == 'c' || &filetype == 'cpp' || &filetype == 'java')
+		if &filetype == 'c'
+			exec "silent !gcc % -o %< && exit || pause" 
+		elseif &filetype == 'cpp'
+			exec "silent !g++ % -o %< -O2 && exit || pause"
+		elseif &filetype == 'java'
+			exec "silent !javac % && exit || pause"
 		endif
 
-		exec "redraw!"
+		call Opentxt()
+		redraw!
 		echo "Finished!"
 	endif
 endfunc
 
 
+
+
 "F6 运行文件
-map <F6> :call RunGcc()<CR>
+nmap <F6> :call RunGcc()<CR>
 func! RunGcc()
-    exec "w"
-    if &filetype == 'cpp'
-        exec "! %<" 
-		exec "redraw"
-    endif
+	if(&filetype == 'cpp' || &filetype == 'c' || &filetype == 'java')
+		if &filetype == 'cpp'
+			exec "! %<" 
+		elseif &filetype == 'c'
+			exec "! %<" 
+		elseif &filetype == 'java'
+			exec "! java %"
+		endif
+		redraw!
+	endif
 endfunc
 
 
 "Ctrl+F6运行并读入in.txt
 map <C-F6> :call InputandRun()<CR>
 func! InputandRun()
-	exec "w"
-
-	if &filetype == 'cpp'
-		exec "! %< < in.txt > out.txt | type out.txt"
-		if(FileIsOpen('in.txt') == 0 || FileIsOpen('out.txt') == 0)
-			exec "only"
-			belowright vsplit in.txt
-			exec "vertical resize 21"
-			belowright sview out.txt
+	if(&filetype == 'cpp' || &filetype == 'c' || &filetype == 'java')
+		if &filetype == 'cpp'
+			exec "! %< < in.txt > out.txt && type out.txt"
+			"exec "! %< < in.txt > out.txt | type out.txt"
+		elseif &filetype == 'c'
+			exec "! %< < in.txt > out.txt && type out.txt"
+		elseif &filetype == 'java'
+			exec "!java % < in.txt > out.txt && type out.txt"
 		endif
-		wincmd t
+
+		call Opentxt()
 		redraw!
-	elseif (expand('%') == 'in.txt' || expand('%') == 'out.txt')
+
+	elseif (expand('%') == 'in.txt')
+		exec "w"
 		exec "silent wincmd h"
 		:call InputandRun()
 	endif
 endfunc
 
 
-"函数：判断'文件'是否打开
+"函数:打开in.txt和out.txt
+func! Opentxt()
+	if(FileIsOpen('in.txt') == 0||FileIsOpen('out.txt') == 0)
+			exec "only"
+			belowright vsplit in.txt
+			exec "silent vertical resize 21"
+			belowright sview out.txt
+			exec "silent wincmd h"
+		endif
+endfunc
+
+"函数;判断'文件'是否打开
 function! FileIsOpen(file)
   let bufnr = bufnr(a:file)
   if bufnr != -1 && bufwinid(bufnr) != -1
@@ -333,6 +340,8 @@ function! FileIsOpen(file)
     return 0
   endif
 endfunction
+
+
 
 
 "F8 gdb调试
@@ -472,3 +481,4 @@ function MyDiff()
     let &shellxquote=l:shxq_sav
   endif
 endfunction
+
