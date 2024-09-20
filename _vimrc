@@ -66,8 +66,9 @@ imap <C-k> <up>
 imap <C-l> <right>
 
 imap <C-f> <BS>
-imap <C-i> <BS>
+"imap <C-i> <BS>
 imap <C-g> <BS>
+imap <C-x> <Del>
 imap <C-;> <Right>
 imap <C-z> <C-o>u
 
@@ -83,6 +84,8 @@ nmap <C-a> <Esc>ggVG
 vmap <C-a> <Esc>ggVG
 vmap <C-c> "+y
 "Ctrl+a+c 全选复制到系统剪切板
+vmap g( s(<Esc>p
+vmap g{ s{<Esc>p
 
 nmap <S-j> 5j
 nmap <S-k> 5k
@@ -262,13 +265,15 @@ map 9<C-F6> 1<C-F6>
 map <F5> :call CompileRunGcc()<CR>
 func! CompileRunGcc()
     exec "w"
-	if(&filetype == 'c' || &filetype == 'cpp' || &filetype == 'java')
+	if(&filetype == 'c' || &filetype == 'cpp' || &filetype == 'java' || &filetype == 'python')
 		if &filetype == 'c'
 			exec "silent !gcc % -o %< && exit || pause" 
 		elseif &filetype == 'cpp'
 			exec "silent !g++ % -o %< -O2 && exit || pause"
 		elseif &filetype == 'java'
 			exec "silent !javac % && exit || pause"
+		elseif &filetype == 'python'
+			exec "!python %"
 		endif
 
 		call Opentxt()
@@ -283,13 +288,15 @@ endfunc
 "F6 运行文件
 nmap <F6> :call RunGcc()<CR>
 func! RunGcc()
-	if(&filetype == 'cpp' || &filetype == 'c' || &filetype == 'java')
+	if(&filetype == 'cpp' || &filetype == 'c' || &filetype == 'java' || &filetype == 'python')
 		if &filetype == 'cpp'
 			exec "! %<" 
 		elseif &filetype == 'c'
 			exec "! %<" 
 		elseif &filetype == 'java'
 			exec "! java %"
+		elseif &filetype == 'python'
+			exec "!python %"
 		endif
 		redraw!
 	endif
@@ -299,7 +306,7 @@ endfunc
 "Ctrl+F6运行并读入in.txt
 map <C-F6> :call InputandRun()<CR>
 func! InputandRun()
-	if(&filetype == 'cpp' || &filetype == 'c' || &filetype == 'java')
+	if(&filetype == 'cpp' || &filetype == 'c' || &filetype == 'java' || &filetype == 'python')
 		if &filetype == 'cpp'
 			exec "! %< < in.txt > out.txt && type out.txt"
 			"exec "! %< < in.txt > out.txt | type out.txt"
@@ -307,6 +314,8 @@ func! InputandRun()
 			exec "! %< < in.txt > out.txt && type out.txt"
 		elseif &filetype == 'java'
 			exec "!java % < in.txt > out.txt && type out.txt"
+		elseif &filetype == 'python'
+			exec "!python % < in.txt > out.txt && type out.txt"
 		endif
 
 		call Opentxt()
