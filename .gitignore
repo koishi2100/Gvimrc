@@ -1,0 +1,4 @@
+# 交换/备份文件
+backup/*
+swap/*
+undo/*
