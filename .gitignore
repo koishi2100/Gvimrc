@@ -1,4 +1,7 @@
 # 交换/备份文件
-backup/*
-swap/*
-undo/*
+vim92/acm/vimswapfiles/backup/*
+vim92/acm/vimswapfiles/swap/*
+vim92/acm/vimswapfiles/undo/*
+!vim92/acm/vimswapfiles/backup/.gitkeep
+!vim92/acm/vimswapfiles/swap/.gitkeep
+!vim92/acm/vimswapfiles/undo/.gitkeep
