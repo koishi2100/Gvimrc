@@ -1,4 +1,3 @@
-
 setl cul	"高亮行
 setl nu		"显示行号
 setl dictionary+=$VIMRUNTIME/acm/template/dictionary.txt	"字典补全
@@ -38,41 +37,41 @@ endfunc
 "F6 运行文件
 nmap <F6> :call RunGcc()<CR>
 func! RunGcc()
-	if(&filetype == 'cpp')
-		echohl Compiling | echo "Running..." | echohl None
-		exec "! %<" 
-	endif
-	redraw!
+    if(&filetype == 'cpp')
+        echohl Compiling | echo "Running..." | echohl None
+        let exe = expand('%:r') . '.exe'
+        exec "! .\\" . exe
+    endif
+    redraw!
 endfunc
 
-
-"Ctrl+F6运行并读入in.txt
+"Ctrl+F6 运行并读入in.txt
 map <C-F6> :call InputandRun()<CR>
 func! InputandRun()
-	if(&filetype == 'cpp')
-		echohl Compiling | echo "Running..." | echohl None
-		exec "!%< <in.txt>out.txt&&type out.txt&&echo."
-	endif
+    if(&filetype == 'cpp')
+        echohl Compiling | echo "Running..." | echohl None
+        let exe = expand('%:r') . '.exe'
+        exec "! .\\" . exe . " <in.txt>out.txt&&type out.txt&&echo."
+    endif
 
-	call Opentxt()
-	redraw!
+    call Opentxt()
+    redraw!
 
-	if(expand('%') == 'in.txt')
-		exec "w"
-		exec "silent wincmd h"
-		:call InputandRun()
-	endif
+    if(expand('%') == 'in.txt')
+        exec "w"
+        exec "silent wincmd h"
+        call InputandRun()
+    endif
 endfunc
 
 nmap <C-CR> :call CompileRunIn()<CR>
 func! CompileRunIn()
-	if(expand('%') == 'in.txt')
-		call InputandRun()
-	elseif CompileRunGcc() == 0
-		call InputandRun()
-	endif
+    if(expand('%') == 'in.txt')
+        call InputandRun()
+    elseif CompileRunGcc() == 0
+        call InputandRun()
+    endif
 endfunc
-
 
 nmap <F4> :silent call Opentxt()<CR>
 
@@ -132,7 +131,4 @@ function! QuickComment()
 			exec "normal! 0\<c-v>\<right>d"
 		endif
 	endif
-endfunction  
-
-
-
+endfunction
