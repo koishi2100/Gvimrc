@@ -1,7 +1,7 @@
 setl cul
 setl nu
 
-map <F5> :call Run()<CR>
+nnoremap <F5> :<C-u>call Run()<CR>
 func! Run()
 	exec "w"
 	if(&filetype == 'python')
@@ -14,7 +14,7 @@ func! Run()
 	endif
 endfunc
 
-map <F6> :call Run2()<CR>
+nnoremap <F6> :<C-u>call Run2()<CR>
 func! Run2()
 	exec 'w'
 	if(&filetype == 'python')
@@ -29,7 +29,7 @@ func! Run2()
 	redraw!
 endfunc
 
-map <C-F6> :call InRun()<CR>
+nnoremap <C-F6> :<C-u>call InRun()<CR>
 func! InRun()
 	exec 'w'
 	if(&filetype == 'python')
@@ -43,7 +43,7 @@ func! InRun()
 	endif
 endfunc
 
-map <C-CR> :call InRun()<CR>
+nnoremap <C-CR> :<C-u>call InRun()<CR>
 
 "函数:打开in.txt和out.txt
 func! Opentxt()
@@ -71,7 +71,7 @@ endfunction
 
 
 "将复制内容覆写入in.txt
-nmap <C-p> :call CtrlP()<CR>
+nnoremap <C-p> :<C-u>call CtrlP()<CR>
 function! CtrlP()
 	if expand('%') == 'in.txt'
 		%d

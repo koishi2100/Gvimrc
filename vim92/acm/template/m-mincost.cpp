@@ -1,5 +1,5 @@
 const int INF = 0x3f3f3f3f;
-template<typename T>
+template<typename T = long long>
 struct Dinic {
 	int n, s1, s2, idx;
 	T maxflow, mincost;

@@ -21,7 +21,7 @@ void NTT(std::vector<long long>& a, bool invert) {
 	}
 
 	for(int len = 2;len <= n;len <<= 1) {
-		long long wlen = qmi(invert ? G : GI,(mod-1)/len,mod);
+		long long wlen = qmi(invert ? GI : G,(mod-1)/len,mod);
 		for (int i = 0;i < n;i += len) {
 			long long w = 1;
 			for (int j = 0;j < len/2;j++) {

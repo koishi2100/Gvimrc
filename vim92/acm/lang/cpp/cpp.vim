@@ -3,7 +3,7 @@ setl nu		"显示行号
 setl dictionary+=$VIMRUNTIME/acm/template/dictionary.txt	"字典补全
 
 "F5 编译
-map <F5> :call CompileRunGcc()<CR>
+nnoremap <F5> :<C-u>call CompileRunGcc()<CR>
 func! CompileRunGcc()
 	exec "w"
 	redraw!
@@ -35,7 +35,7 @@ endfunc
 
 
 "F6 运行文件
-nmap <F6> :call RunGcc()<CR>
+nnoremap <F6> :<C-u>call RunGcc()<CR>
 func! RunGcc()
     if(&filetype == 'cpp')
         echohl Compiling | echo "Running..." | echohl None
@@ -46,7 +46,7 @@ func! RunGcc()
 endfunc
 
 "Ctrl+F6 运行并读入in.txt
-map <C-F6> :call InputandRun()<CR>
+nnoremap <C-F6> :<C-u>call InputandRun()<CR>
 func! InputandRun()
     if(&filetype == 'cpp')
         echohl Compiling | echo "Running..." | echohl None
@@ -64,7 +64,7 @@ func! InputandRun()
     endif
 endfunc
 
-nmap <C-CR> :call CompileRunIn()<CR>
+nnoremap <C-CR> :<C-u>call CompileRunIn()<CR>
 func! CompileRunIn()
     if(expand('%') == 'in.txt')
         call InputandRun()
@@ -73,7 +73,7 @@ func! CompileRunIn()
     endif
 endfunc
 
-nmap <F4> :silent call Opentxt()<CR>
+nnoremap <F4> :<C-u>silent call Opentxt()<CR>
 
 "函数:打开in.txt和out.txt
 func! Opentxt()
@@ -100,7 +100,7 @@ endfunction
 
 
 "将复制内容覆写入in.txt
-nmap <C-p> :silent call CtrlP()<CR>
+nnoremap <C-p> :<C-u>silent call CtrlP()<CR>
 function! CtrlP()
 	if expand('%') == 'in.txt'
 		%d

@@ -1,53 +1,51 @@
 "------------------按键映射----------------------
-  
+
 "nore为非递归 <silent>静默执行
 imap jk <Esc>
-"imap <silent> jk <ESC>m`<C-o>
+"inoremap <silent> jk <ESC>m`<C-o>
 	"插入模式下		jk映射为Esc  
 	"Ctrl+h/j/k/l映射为上下左右移动光标		
-imap <C-h> <left>
-imap <C-j> <down>
-imap <C-k> <up>
-imap <C-l> <right>
+inoremap <C-h> <left>
+inoremap <C-j> <down>
+inoremap <C-k> <up>
+inoremap <C-l> <right>
 
-imap <C-f> <BS>
-imap <C-g> <BS>
-imap <C-;> <Right>
-imap <C-z> <C-o>u
+inoremap <S-Backspace> <C-w>
 
-imap <S-Backspace> <C-w>
-
-nmap <space> :
+nnoremap <space> :
 	"普通入模式下		<space>映射为:
 	"C+h/j/k/l窗口切换
-nmap <C-h> <C-w>h		
-nmap <C-l> <C-w>l
-nmap <C-j> <C-w>j
-nmap <C-k> <C-w>k
+nnoremap <C-h> <C-w>h		
+nnoremap <C-l> <C-w>l
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
 
 
-nmap <C-a> <Esc>ggVG
-vmap <C-a> <Esc>ggVG
-vmap <C-c> "+y
+nnoremap <C-a> <Esc>ggVG
+vnoremap <C-a> <Esc>ggVG
+vnoremap <C-c> "+y
 "Ctrl+a+c 全选复制到系统剪切板
-cmap <C-h> <left>
-cmap <C-j> <down>
-cmap <C-k> <up>
-cmap <C-l> <right>
+cnoremap <C-h> <left>
+cnoremap <C-j> <down>
+cnoremap <C-k> <up>
+cnoremap <C-l> <right>
 
-nmap <S-j> 5j
-nmap <S-k> 5k
-
-
+nnoremap <S-j> 5j
+nnoremap <S-k> 5k
 
 
-vmap <space> <Esc>	
+
+
+vnoremap <space> <Esc>	
 	"可视模式下		<space>映射为Esc
-vmap <C-d> d
+
+vnoremap <S-j> 5j
+vnoremap <S-k> 5k
+vnoremap <C-j> J
 
 
 
-set timeoutlen=1000  "设定连续按键延迟为1000ms
+set timeoutlen=500  "设定连续按键延迟为500ms
 "set winaltkeys=no		"设置Alt键不映射到菜单栏
 
 
@@ -93,7 +91,7 @@ function! UuzBrackets(char)
 		let col = col('.') - 1
 		let line = getline('.')
 		if(stridx(line,'{')) != -1
-			return "\<CR>\<ESC>\%a\<CR>"
+			return "\<CR>\<ESC>%a\<CR>"
 		else
 			return "\<CR>"
 		endif
@@ -105,12 +103,12 @@ endfunction
 
 
 
-"快速为句子添加括号(有bug待修)
-vmap g( s(<Esc>p
-vmap g{ s{<Esc>p
-vmap g[ s[<Esc>p
-vmap g" s""<Left><Esc>p
-vmap g' s''<Left><Esc>p
+"快速为选中变量添加括号
+vnoremap g( <Esc>`>a)<Esc>`<i(<Esc>
+vnoremap g[ <Esc>`>a]<Esc>`<i[<Esc>
+vnoremap g{ <Esc>`>a}<Esc>`<i{<Esc>
+vnoremap g" <Esc>`>a"<Esc>`<i"<Esc>
+vnoremap g' <Esc>`>a'<Esc>`<i'<Esc>
 
 
 
